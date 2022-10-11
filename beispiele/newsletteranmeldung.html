@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--
+- Praktikum DBWT. Autoren:
+- Nodirjon, Tadjiev, 3527449
+- Daniel, Winata, 3525700
+-->
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Erstes Formular</title>
+</head>
+<body>
+<form action="formdata.html" method="post">
+    <fieldset style="width:400px">
+        <legend>Anmeldung</legend>
+        <div>Anrede:</div>
+        <input type="radio" id="Herr" name="Anrede" value="Herr">
+        <label for="Herr">Herr</label><br>
+        <input type="radio" id="Frau" name="Anrede" value="Frau">
+        <label for="Frau">Frau</label><br>
+        <label for="vorname">Vorname:<sup>*</sup></label><br>
+        <input type="text" id="vorname" name="benutzer" placeholder="Bitte geben Sie Ihren Vornamen ein." size="35"
+               required><br>
+        <label for="nachname">Nachname:<sup>*</sup></label><br>
+        <input type="text" id="nachname" name="benutzer" placeholder="Bitte geben Sie Ihren Nachnamen ein." size="35"
+               required><br>
+        <label for="absender">E-Mail Adresse:<sup>*</sup></label><br>
+        <input name="absender" id="absender" placeholder="Bitte geben Sie Ihre E-Mail ein." size="35" required><br>
+        <label for="interval">Benachrichtigungsinterval:</label><br>
+        <select id="interval" name="date">
+            <option value="Tag">Tag</option>
+            <option value="Woche">Woche</option>
+            <option value="Jahr">Jahr</option>
+        </select><br><br>
+        <input type="checkbox" id="scales" name="agb" required>
+        <label for="scales">Datensschutzhinweise gelesen</label><br>
+        <br>
+        <input type="reset" value="Zur&uuml;cksetzen">
+        <input type="submit" value="Abschicken">
+        <br><br>
+        <div><small>*) Eingaben sind Pflicht</small></div>
+    </fieldset>
+</form>
+</body>
+</html>
