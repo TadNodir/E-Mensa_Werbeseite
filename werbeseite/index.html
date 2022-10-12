@@ -6,7 +6,7 @@
 -->
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Mensa</title>
 
     <style>
@@ -16,33 +16,50 @@
             text-align: center;
         }
 
+        body {
+            margin: 0;
+        }
+
         .header-container {
             display: grid;
             grid-template-columns: 1fr 3fr;
-            padding: 10px;
             position: sticky;
-            border-bottom: 2px black solid;
-            background-color: black;
+            padding: 0.8vw;
+            border-bottom: teal solid;
+            background-color: teal;
         }
 
         .header-item1 {
             border-radius: 50%;
-            border-style: solid;
-            width: 30%;
-            justify-self: center;
+            place-self: center;
+            max-width: 25%;
+            min-width: 20%;
         }
 
         .header-item2 {
-            padding: 2px;
+            padding: 0.7vw;
             place-self: center stretch;
+            margin: 1vw;
         }
 
         .header-item2 > li {
             list-style: none;
             display: inline;
-            font-size: 25px;
-            margin: 50px;
+            margin: 0.7vw;
             color: white;
+            font-size: 2.2vw;
+        }
+
+        h2 {
+            font-size: 2.5vw;
+        }
+
+        a:link {
+            color: darkgrey;
+        }
+
+        a:visited {
+            color: black;
         }
 
         .main-container {
@@ -51,22 +68,18 @@
         }
 
         .centerCol {
-            padding-top: 75px;
+            padding-top: 4vw;
         }
 
         .top-picture {
-            width: 97%;
-            height: 23%;
-        }
-
-        .top-picture:hover {
-            width: 100%;
-            height: 25%;
+            width: 50vw;
+            height: 30vw;
         }
 
         p {
             border: solid 2px black;
             padding: 1em;
+            font-size: 1vw;
         }
 
         table, th, td {
@@ -74,38 +87,45 @@
             border: 1px solid;
             padding: 0.5em;
             text-align: center;
+            font-size: 1vw;
         }
 
         .inNumbers ul li {
             display: inline;
-            margin-right: 5em;
-            font-size: larger;
+            font-size: 1.7vw;
             text-align: center;
         }
 
+        .inNumbers ul li:nth-of-type(1), .inNumbers ul li:nth-of-type(2) {
+            margin-right: 7%;
+        }
+
+        .inputContainer {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
+
+        form > *, input, select {
+            font-size: 1vw;
+        }
+
         .info {
-            float: left;
             margin-left: 3px;
             margin-right: 3px;
-        }
-
-        #wichtig {
-            text-align: left;
-        }
-
-        .wichtig-list > ul {
-            display: table;
-            margin: 0 auto;
+            align-self: center;
         }
 
         .wichtig-list > ul > li {
             text-align: left;
+            font-size: 1vw;
         }
 
         footer {
             text-align: center;
-            margin-top: 10em;
+            margin-top: 4vw;
             border-top: 1px solid black;
+            font-size: 1vw;
         }
 
         footer li {
@@ -116,11 +136,11 @@
 
         footer ul li:nth-of-type(1), footer ul li:nth-of-type(2) {
             border-right: 2px solid black;
-            padding-right: 2em;
+            padding-right: 5vw;
         }
 
-        [name="language"] {
-            width: 200%;
+        [name="language"], [name="benutzer"] {
+            width: 80%;
         }
 
     </style>
@@ -190,9 +210,9 @@
             </tr>
         </table>
 
-        <h2 id="zahlen">E-Mensa in Zahlen</h2>
+        <h2>E-Mensa in Zahlen</h2>
 
-        <div class="inNumbers">
+        <div id="zahlen" class="inNumbers">
             <ul>
                 <li>X Besuche</li>
                 <li>Y Anmeldungen zum Newsletter</li>
@@ -203,31 +223,39 @@
         <h2 id="kontakt">Interesse geweckt? Wir informieren Sie!</h2>
         <form action="" method="POST">
             <fieldset>
-                <div class="info">
-                    <label for="vorname">Vorname:<sup>*</sup></label><br>
-                    <input type="text" id="vorname" name="benutzer" placeholder="Bitte geben Sie Ihren Vornamen ein."
-                           size="35" required><br>
+                <div class="inputContainer">
+                    <div class="info">
+                        <label for="vorname">Vorname:<sup>*</sup></label><br>
+                        <input type="text" id="vorname" name="benutzer"
+                               placeholder="Bitte geben Sie Ihren Vornamen ein."
+                               size="35" required><br>
+                    </div>
+                    <div class="info">
+                        <label for="nachname">E-Mail:<sup>*</sup></label><br>
+                        <input type="text" id="nachname" name="benutzer" placeholder="Bitte geben Sie Ihre E-Mail ein."
+                               size="35" required><br>
+                    </div>
+                    <div class="info">
+                        <label for="lang">Newsletter bitte in:</label><br>
+                        <select id="lang" name="language">
+                            <option value="Deutsch">Deutsch</option>
+                            <option value="Englisch">Englisch</option>
+                            <option value="Spanisch">Spanisch</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="info">
-                    <label for="nachname">E-Mail:<sup>*</sup></label><br>
-                    <input type="text" id="nachname" name="benutzer" placeholder="Bitte geben Sie Ihre E-Mail ein."
-                           size="35" required><br>
+                    <input type="checkbox" id="scales" name="agb" required>
+                    <label for="scales">Den Datenschutzbestimmungen stimme ich zu<sup>*</sup></label>
                 </div>
-                <div class="info">
-                    <label for="lang">Newsletter bitte in:</label><br>
-                    <select id="lang" name="language">
-                        <option value="Deutsch">Deutsch</option>
-                        <option value="Englisch">Englisch</option>
-                        <option value="Spanisch">Spanisch</option>
-                    </select>
-                </div>
-                <br><br><br>
-                <input type="checkbox" id="scales" name="agb" required>
-                <label for="scales">Den Datenschutzbestimmungen stimme ich zu<sup>*</sup></label><br>
                 <br>
-                <input type="submit" value="Zum Newsletter anmelden">
-                <br><br>
-                <div><small>*) Eingaben sind Pflicht</small></div>
+                <div class="info">
+                    <input type="submit" value="Zum Newsletter anmelden">
+                </div>
+                <div class="info">
+                    <br>
+                    *) Eingaben sind Pflicht
+                </div>
             </fieldset>
         </form>
         <h2 id="wichtig">Das ist uns wichtig!</h2>
@@ -238,7 +266,6 @@
                 <li>Sauberkeit</li>
             </ul>
         </div>
-        <br><br>
         <h2>Wir freuen uns auf Ihren Besuch!</h2>
     </div>
     <div></div>
