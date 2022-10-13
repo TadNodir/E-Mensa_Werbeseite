@@ -6,121 +6,226 @@
 -->
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Mensa</title>
 
     <style>
+        /*
+        All children of main tag have to have these characteristics
+        we want to center here all the elements in main and use they in full wide
+         */
         main > * {
             width: 100%;
             justify-content: center;
             text-align: center;
         }
 
+        /*
+        Removing margin from the body, in order not to have the margin between header and sides
+         */
+        body {
+            margin: 0;
+        }
+
+        /*
+        Header
+        The header container is designed with help of grid, where we assign each word in menu as a column
+        'sticky' places the header according to the normal flow of the document
+        Here and further we used vw as a unit of measurement to do the website more responsive and depending
+        on the page size
+         */
         .header-container {
             display: grid;
             grid-template-columns: 1fr 3fr;
-            padding: 10px;
             position: sticky;
-            border-bottom: 2px black solid;
-            background-color: black;
+            padding: 0.8vw;
+            border-bottom: teal solid;
+            background-color: teal;
         }
 
+        /*
+        Logo of the Mensa
+        Radius is 50%, to make the logo round
+        Placing it in center as it is a child item of a grid
+        Not allowing to get bigger/smaller restricting the max/min sizes
+         */
         .header-item1 {
             border-radius: 50%;
-            border-style: solid;
-            width: 30%;
-            justify-self: center;
+            place-self: center;
+            max-width: 25%;
+            min-width: 20%;
         }
 
+        /*
+        List of menu containing
+        placing the menu words as they are a grid children and stretching them
+         */
         .header-item2 {
-            padding: 2px;
+            padding: 0.7vw;
             place-self: center stretch;
+            margin: 1vw;
         }
 
+        /*
+        Each word of the menu
+        Displaying inline, as otherwise they are displayed as a list
+         */
         .header-item2 > li {
             list-style: none;
             display: inline;
-            font-size: 25px;
-            margin: 50px;
+            margin: 0.7vw;
             color: white;
+            font-size: 2.2vw;
         }
 
+        /*
+        Headers for each menu section
+        Setting one font size for all menu headers
+         */
+        h2 {
+            font-size: 2.5vw;
+        }
+
+        /*
+        If not pressed the link, be dark grey
+         */
+        a:link {
+            color: darkgrey;
+        }
+
+        /*
+        If already visited the link, be black
+         */
+        a:visited {
+            color: black;
+        }
+
+        /*
+        Designing the main content of the page as a grid
+         */
         .main-container {
             display: grid;
             grid-template-columns: 1fr 2fr 1fr;
         }
 
+        /*
+        Central column
+        the distance between the header and main content
+         */
         .centerCol {
-            padding-top: 75px;
+            padding-top: 4vw;
         }
 
+        /*
+        Rectangle picture of the food table
+         */
         .top-picture {
-            width: 97%;
-            height: 23%;
+            width: 50vw;
+            height: 30vw;
         }
 
-        .top-picture:hover {
-            width: 100%;
-            height: 25%;
-        }
-
+        /*
+        Lorem ipsum text in the middle
+         */
         p {
             border: solid 2px black;
             padding: 1em;
+            font-size: 1vw;
         }
 
+        /*
+        Table with prices made relative to column full width
+        Aligning text to the center
+         */
         table, th, td {
             width: 100%;
             border: 1px solid;
             padding: 0.5em;
             text-align: center;
+            font-size: 1vw;
         }
 
+        /*
+        Mensa in numbers
+        List displayed inline and aligned to the center
+         */
         .inNumbers ul li {
             display: inline;
-            margin-right: 5em;
-            font-size: larger;
+            font-size: 1.7vw;
             text-align: center;
         }
 
+        /*
+        first and second words have a margin between each other
+         */
+        .inNumbers ul li:nth-of-type(1), .inNumbers ul li:nth-of-type(2) {
+            margin-right: 7%;
+        }
+
+        /*
+        Two input tags and one select tag designed as flex rows and leaving between them space evenly
+         */
+        .inputContainer {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
+
+        /*
+        All children of form, input and select tag have to have the font size depending of page size
+         */
+        form > *, input, select {
+            font-size: 1vw;
+        }
+
+        /*
+        All elements of the form
+         */
         .info {
-            float: left;
             margin-left: 3px;
             margin-right: 3px;
+            align-self: center;
         }
 
-        #wichtig {
-            text-align: left;
-        }
-
-        .wichtig-list > ul {
-            display: table;
-            margin: 0 auto;
-        }
-
+        /*
+        List of important things aligned left
+         */
         .wichtig-list > ul > li {
             text-align: left;
+            font-size: 1vw;
         }
 
+        /*
+        The footer text is aligned to the center and has a distance to the List of important things
+         */
         footer {
             text-align: center;
-            margin-top: 10em;
+            margin-top: 4vw;
             border-top: 1px solid black;
+            font-size: 1vw;
         }
 
+        /*
+        Each word of the footer list displayed inlined
+         */
         footer li {
-            list-style: none;
             display: inline;
             margin-right: 5em;
         }
 
+        /*
+        First and second words have a distance between each other and border
+         */
         footer ul li:nth-of-type(1), footer ul li:nth-of-type(2) {
             border-right: 2px solid black;
-            padding-right: 2em;
+            padding-right: 5vw;
         }
 
-        [name="language"] {
-            width: 200%;
+        /*
+        Input tags with these name values have to have relative width of 80%
+         */
+        [name="language"], [name="benutzer"] {
+            width: 80%;
         }
 
     </style>
@@ -190,9 +295,9 @@
             </tr>
         </table>
 
-        <h2 id="zahlen">E-Mensa in Zahlen</h2>
+        <h2>E-Mensa in Zahlen</h2>
 
-        <div class="inNumbers">
+        <div id="zahlen" class="inNumbers">
             <ul>
                 <li>X Besuche</li>
                 <li>Y Anmeldungen zum Newsletter</li>
@@ -203,31 +308,39 @@
         <h2 id="kontakt">Interesse geweckt? Wir informieren Sie!</h2>
         <form action="" method="POST">
             <fieldset>
-                <div class="info">
-                    <label for="vorname">Vorname:<sup>*</sup></label><br>
-                    <input type="text" id="vorname" name="benutzer" placeholder="Bitte geben Sie Ihren Vornamen ein."
-                           size="35" required><br>
+                <div class="inputContainer">
+                    <div class="info">
+                        <label for="vorname">Vorname:<sup>*</sup></label><br>
+                        <input type="text" id="vorname" name="benutzer"
+                               placeholder="Bitte geben Sie Ihren Vornamen ein."
+                               size="35" required><br>
+                    </div>
+                    <div class="info">
+                        <label for="nachname">E-Mail:<sup>*</sup></label><br>
+                        <input type="text" id="nachname" name="benutzer" placeholder="Bitte geben Sie Ihre E-Mail ein."
+                               size="35" required><br>
+                    </div>
+                    <div class="info">
+                        <label for="lang">Newsletter bitte in:</label><br>
+                        <select id="lang" name="language">
+                            <option value="Deutsch">Deutsch</option>
+                            <option value="Englisch">Englisch</option>
+                            <option value="Spanisch">Spanisch</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="info">
-                    <label for="nachname">E-Mail:<sup>*</sup></label><br>
-                    <input type="text" id="nachname" name="benutzer" placeholder="Bitte geben Sie Ihre E-Mail ein."
-                           size="35" required><br>
+                    <input type="checkbox" id="scales" name="agb" required>
+                    <label for="scales">Den Datenschutzbestimmungen stimme ich zu<sup>*</sup></label>
                 </div>
-                <div class="info">
-                    <label for="lang">Newsletter bitte in:</label><br>
-                    <select id="lang" name="language">
-                        <option value="Deutsch">Deutsch</option>
-                        <option value="Englisch">Englisch</option>
-                        <option value="Spanisch">Spanisch</option>
-                    </select>
-                </div>
-                <br><br><br>
-                <input type="checkbox" id="scales" name="agb" required>
-                <label for="scales">Den Datenschutzbestimmungen stimme ich zu<sup>*</sup></label><br>
                 <br>
-                <input type="submit" value="Zum Newsletter anmelden">
-                <br><br>
-                <div><small>*) Eingaben sind Pflicht</small></div>
+                <div class="info">
+                    <input type="submit" value="Zum Newsletter anmelden">
+                </div>
+                <div class="info">
+                    <br>
+                    *) Eingaben sind Pflicht
+                </div>
             </fieldset>
         </form>
         <h2 id="wichtig">Das ist uns wichtig!</h2>
@@ -238,7 +351,6 @@
                 <li>Sauberkeit</li>
             </ul>
         </div>
-        <br><br>
         <h2>Wir freuen uns auf Ihren Besuch!</h2>
     </div>
     <div></div>

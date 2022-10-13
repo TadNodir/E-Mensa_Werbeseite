@@ -4,22 +4,34 @@
     <meta charset="UTF-8">
     <title>CSS Übung</title>
     <style>
+        /*
+        Specifies the body font as Arial and sets serif as a backup for the case of not loading
+        Setting the height of the maximum page size
+         */
         body {
             font-family: "Arial", serif;
             min-height: 100vh;
-            text-align: initial;
         }
 
+        /*
+        Making the headline bold
+         */
         #elektro {
             font-weight: bold;
         }
 
+        /*
+        Tabelle link is bold and coloured to chocolate without underlining
+         */
         a {
             color: chocolate;
             font-weight: bold;
             text-decoration: none;
         }
 
+        /*
+        The table takes automatic margin and padding distances and has a relative width of 45%
+         */
         #etabelle {
             border: 2px solid chocolate;
             margin-left: auto;
@@ -27,36 +39,57 @@
             width: 45%;
         }
 
+        /*
+        Color the header and second row of the table to bisque color
+         */
         thead, tbody tr:nth-of-type(2) {
             background-color: bisque;
         }
 
+        /*
+        Each list element has top and bottom margins of 15px
+         */
         li {
             margin-top: 15px;
             margin-bottom: 15px;
         }
 
+        /*
+        The footer is fully wide and its text is aligned to right and bottomed
+         */
         footer {
             width: 100%;
             text-align: right;
             bottom: 0;
         }
 
+        /*
+        Each word of the list in footer is inlined
+         */
         footer ul li {
             display: inline;
             margin-right: 1em;
         }
 
+        /*
+        The sticks dividing the words in footer
+         */
         footer ul li:nth-of-type(1), footer ul li:nth-of-type(2), footer ul li:nth-of-type(3) {
             border-right: 2px solid chocolate;
             padding-right: 1em;
         }
 
+        /*
+        Text after the table
+         */
         .center {
             border-bottom: 2px solid chocolate;
             text-align: center;
         }
 
+        /*
+        The letter E had underlining. Removed it
+         */
         [title="Extra"] {
             text-decoration: initial;
         }
