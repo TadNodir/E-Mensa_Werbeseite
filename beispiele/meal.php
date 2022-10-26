@@ -96,7 +96,7 @@ $show_desc = NULL;
 if (!isset($_GET[GET_PARAM_SHOW_DESCRIPTION])) {
     $show_desc = $translate['description'];
 } else {
-    if (!empty($_GET[GET_PARAM_SHOW_DESCRIPTION])) {
+    if (($_GET[GET_PARAM_SHOW_DESCRIPTION]) == 0) {
         $show_desc = NULL;
     } else {
         $show_desc = $translate['description'];
@@ -170,8 +170,6 @@ function calcMeanStars(array $ratings) : float {
     return $sum / count($ratings);
 }
 
-
-
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -190,16 +188,16 @@ function calcMeanStars(array $ratings) : float {
     </style>
 </head>
 <body>
-<form method="get" action="meal.php">
+<form method="get">
     <label for="lang"><?php echo $translate['language']; ?></label><br>
     <a href="meal.php?lang=de"><?php echo $de['lang_de']; ?></a>
     <a href="meal.php?lang=en"><?php echo $en['lang_en']; ?></a><br>
-    <input type="submit" value="<?php echo $translate['reveal']; ?>" name="show_description">
+    <button type="submit" value="<?php echo $show_desc ? 0 : 1; ?>" name="show_description"><?php echo $translate['reveal']; ?></button>
+</form>
     <h1><?php echo $translate['meal'] . ": " . $translate['description']; ?></h1>
     <p><?php echo $show_desc; ?></p>
-    <h1><?php echo $translate['review'] . " (" . $translate['overall'] . ": " .
-            calcMeanStars($ratings); ?>)</h1>
-</form>
+    <h1><?php echo $translate['review'] . " (" . $translate['overall'] . ": " . calcMeanStars($ratings) . ")"; ?></h1>
+
 
 <form method="get">
     <label for="search_text">Filter:</label>
