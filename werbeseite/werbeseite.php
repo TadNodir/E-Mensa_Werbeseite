@@ -1,3 +1,8 @@
+<?php
+include 'foodList.php';
+echo "Test";
+?>
+
 <!DOCTYPE html>
 <!--
 - Praktikum DBWT. Autoren:
@@ -277,22 +282,23 @@
                 <td></td>
                 <td>Preis intern</td>
                 <td>Preis extern</td>
+                <td>Bilder</td>
             </tr>
-            <tr>
-                <td>Rindfleisch mit Bambus, Kaiserschoten und rotem Paprika, dazu Mie Nudeln</td>
-                <td>3,50&euro;</td>
-                <td>6,20&euro;</td>
-            </tr>
-            <tr>
-                <td>Spinatsrisotto mit kleinen Samosateigecken und gemischter Salat</td>
-                <td>2,90&euro;</td>
-                <td>5,30&euro;</td>
-            </tr>
-            <tr>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-            </tr>
+                <?php
+                $foodList = include "foodList.php";
+                $imgDir = scandir('C:\Users\tadno\PhpstormProjects\E-Mensa_Werbeseite\E-Mensa_Werbeseite\werbeseite\img');
+                $images = [];
+                for ($i = 2; $i < 6; $i++) {
+                    $images[] = trim("\werbeseite\img\ ") . $imgDir[$i];
+                }
+                for ($i = 0; $i < 4; $i++) {
+                    echo "<tr><td>{$foodList[$i]['name']}</td>
+                     <td>{$foodList[$i]['price_intern']} &euro;</td>
+                     <td>{$foodList[$i]['price_extern']} &euro;</td>
+                     <td><img src='$images[$i]' width='100px' height='70px'></td>
+                 </tr>";
+                }
+                ?>
         </table>
 
         <h2>E-Mensa in Zahlen</h2>
