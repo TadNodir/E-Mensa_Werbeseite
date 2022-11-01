@@ -1,4 +1,10 @@
 <?php
+/**
+ * Praktikum DBWT. Autoren:
+ * Daniel, Winata, 3525700
+ * Nodirjon, Tadjiev, 3527449
+ */
+
 $info = [
     'date' => date('d.m.Y'),
     'time' => date("h:i:sa"),

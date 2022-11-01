@@ -1,6 +1,67 @@
 <?php
+/**
+ * Praktikum DBWT. Autoren:
+ * Daniel, Winata, 3525700
+ * Nodirjon, Tadjiev, 3527449
+ */
 include 'foodList.php';
 echo "Test";
+
+$nameErr = $emailErr = "";
+$name = $email = "";
+$successName = $successEmail = false;
+$userData = [];
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty($_POST["vorname"])) {
+        $nameErr = "Bitte den Namen eingeben";
+    } else {
+        $name = legit_input($_POST["vorname"]);
+        // check if name only contains letters and whitespace
+        if (!preg_match("/^([a-zA-Z' ]+)$/", $name)) {
+            $nameErr = "Falsche Namenseingabe";
+        } else {
+            $userData[0] = $name;
+            $successName = true;
+        }
+    }
+
+    if (empty($_POST["email"])) {
+        $emailErr = "Bitte Email Addresse eingeben";
+    } else {
+        $email = legit_input($_POST["email"]);
+
+        // check if e-mail address is well-formed
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $emailErr = "Falsche Email Eingabe";
+        } else {
+            $userData[1] = $email;
+            $successEmail = true;
+        }
+    }
+    $userData[2] = $_POST['language'];
+    $userData[3] = $_POST['agb'];
+}
+
+function legit_input($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+
+
+$file = fopen('./newsletterData.txt', 'w');
+if (!$file) {
+    die('Öffnen fehlgeschlagen');
+}
+foreach ($userData as $info) {
+    $line = "$info\n";
+    fwrite($file, $line);
+}
+fclose($file);
+
 ?>
 
 <!DOCTYPE html>
@@ -187,8 +248,7 @@ echo "Test";
         All elements of the form
          */
         .info {
-            margin-left: 3px;
-            margin-right: 3px;
+            margin: 3px;
             align-self: center;
         }
 
@@ -231,6 +291,15 @@ echo "Test";
          */
         [name="language"], [name="benutzer"] {
             width: 80%;
+        }
+
+        .error {
+            color: #FF0000;
+        }
+
+        .successMessage {
+            color: green;
+            font-weight: bold;
         }
 
     </style>
@@ -284,21 +353,21 @@ echo "Test";
                 <td>Preis extern</td>
                 <td>Bilder</td>
             </tr>
-                <?php
-                $foodList = include "foodList.php";
-                $imgDir = scandir('C:\Users\tadno\PhpstormProjects\E-Mensa_Werbeseite\E-Mensa_Werbeseite\werbeseite\img');
-                $images = [];
-                for ($i = 2; $i < 6; $i++) {
-                    $images[] = trim("\werbeseite\img\ ") . $imgDir[$i];
-                }
-                for ($i = 0; $i < 4; $i++) {
-                    echo "<tr><td>{$foodList[$i]['name']}</td>
+            <?php
+            $foodList = include "foodList.php";
+            $imgDir = scandir('C:\Users\tadno\PhpstormProjects\E-Mensa_Werbeseite\E-Mensa_Werbeseite\werbeseite\img');
+            $images = [];
+            for ($i = 2; $i < 6; $i++) {
+                $images[] = trim("\werbeseite\img\ ") . $imgDir[$i];
+            }
+            for ($i = 0; $i < 4; $i++) {
+                echo "<tr><td>{$foodList[$i]['name']}</td>
                      <td>{$foodList[$i]['price_intern']} &euro;</td>
                      <td>{$foodList[$i]['price_extern']} &euro;</td>
                      <td><img src='$images[$i]' width='100px' height='70px'></td>
                  </tr>";
-                }
-                ?>
+            }
+            ?>
         </table>
 
         <h2>E-Mensa in Zahlen</h2>
@@ -317,14 +386,16 @@ echo "Test";
                 <div class="inputContainer">
                     <div class="info">
                         <label for="vorname">Vorname:<sup>*</sup></label><br>
-                        <input type="text" id="vorname" name="benutzer"
-                               placeholder="Bitte geben Sie Ihren Vornamen ein."
+                        <input type="text" id="vorname" name="vorname"
+                               placeholder="Max"
                                size="35" required><br>
+                        <span class="error"><?php echo $nameErr; ?></span>
                     </div>
                     <div class="info">
-                        <label for="nachname">E-Mail:<sup>*</sup></label><br>
-                        <input type="text" id="nachname" name="benutzer" placeholder="Bitte geben Sie Ihre E-Mail ein."
+                        <label for="email">E-Mail:<sup>*</sup></label><br>
+                        <input type="text" id="email" name="email" placeholder="name@example.com"
                                size="35" required><br>
+                        <span class="error"><?php echo $emailErr; ?></span>
                     </div>
                     <div class="info">
                         <label for="lang">Newsletter bitte in:</label><br>
@@ -341,7 +412,7 @@ echo "Test";
                 </div>
                 <br>
                 <div class="info">
-                    <input type="submit" value="Zum Newsletter anmelden">
+                    <input type="submit" name="submit" value="Zum Newsletter anmelden">
                 </div>
                 <div class="info">
                     <br>
@@ -349,6 +420,9 @@ echo "Test";
                 </div>
             </fieldset>
         </form>
+        <span class="successMessage"><?php if ($successName && $successEmail) {
+                echo "Daten erfolgreich gespeichert.";
+            } ?></span>
         <h2 id="wichtig">Das ist uns wichtig!</h2>
         <div class="wichtig-list">
             <ul>

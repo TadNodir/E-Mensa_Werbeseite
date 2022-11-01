@@ -1,9 +1,9 @@
-/**
-* Praktikum DBWT. Autoren:
-* Daniel, Winata, 3525700
-* Nodirjon, Tadjiev, 3527449
-*/
 <?php
+/**
+ * Praktikum DBWT. Autoren:
+ * Daniel, Winata, 3525700
+ * Nodirjon, Tadjiev, 3527449
+ */
 include 'm2_4a_standardparameter.php';
 
 $result = "No results yet";
