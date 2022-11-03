@@ -7,7 +7,7 @@
 const GET_PARAM_MIN_STARS = 'search_min_stars';
 const GET_PARAM_SEARCH_TEXT = 'search_text';
 const GET_PARAM_SHOW_DESCRIPTION = 'show_description';
-const GET_MIN_MAX = "show_top_flop";
+const GET_PARAM_MAX_STARS = 'search_max_stars';
 
 /**
  * List of all allergens.
@@ -133,27 +133,17 @@ if (!empty($_GET[GET_PARAM_SEARCH_TEXT])) {
         }
     }
 } else if (!empty($_GET[GET_PARAM_MIN_STARS])) {
-    $minStars = $_GET[GET_PARAM_MIN_STARS];
+    $minStars = findMinStar($ratings);
     foreach ($ratings as $rating) {
-        if ($rating['stars'] >= $minStars) {
+        if ($rating['stars'] <= $minStars) {
             $showRatings[] = $rating;
         }
     }
-} else if (!empty($_GET[GET_MIN_MAX])) {
-    $min_max = $_GET[GET_MIN_MAX];
-    if ($min_max === "TOP") {
-        $maxStar = findMaxStar($ratings);
-        foreach ($ratings as $rating) {
-            if ($rating['stars'] === $maxStar) {
-                $showRatings[] = $rating;
-            }
-        }
-    } else if ($min_max === "FLOP") {
-        $minStar = findMinStar($ratings);
-        foreach ($ratings as $rating) {
-            if ($rating['stars'] === $minStar) {
-                $showRatings[] = $rating;
-            }
+} else if (!empty($_GET[GET_PARAM_MAX_STARS])) {
+    $maxStars = findMaxStar($ratings);
+    foreach ($ratings as $rating) {
+        if ($rating['stars'] >= $maxStars) {
+            $showRatings[] = $rating;
         }
     }
 }
@@ -203,6 +193,8 @@ function calcMeanStars(array $ratings) : float {
     <label for="search_text">Filter:</label>
     <input id="search_text" type="text" name="search_text" value="<?php echo $_GET[GET_PARAM_SEARCH_TEXT] ?? '' ?>">
     <input type="submit" value="<?php echo $translate['search']; ?>">
+    <button type="submit" name="search_max_stars" value="1">TOP</button>
+    <button type="submit" name="search_min_stars" value="1">FLOP</button>
 </form>
 <table class="rating">
     <thead>

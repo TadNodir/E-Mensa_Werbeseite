@@ -16,66 +16,47 @@ $famousMeals = [
         'winner' => 2019]
 ];
 
-function noWinner($arr): array
-{
-    $years = [];
-    foreach ($arr as $item) {
-        if (is_array($item['winner'])) {
-            foreach ($item['winner'] as $year) {
-                $years[] = $year;
-            }
-        } else {
-            $years[] = $item['winner'];
-        }
+function reverseWinner(array $winner) : array {
+    $newWinner = [];
+    $len = count($winner);
+    for($i= $len - 1; $i >= 0; $i--) {
+        $newWinner[] = $winner[$i];
     }
-    $allYears = range(2000, 2022);
-
-    return array_diff($allYears, $years);
+    return $newWinner;
 }
 
-?>
-
-
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Mensa</title>
-
-    <style>
-        li {
-            margin-top: 10px;
-            padding-left: 5px;
-        }
-    </style>
-</head>
-
-<form method="get">
-    <ol>
-        <?php
-        foreach ($famousMeals as $meal) {
-            echo "<li>" . $meal['name'] . "</li>";
-            if (is_array($meal['winner'])) {
-                rsort($meal['winner']);
-                foreach ($meal['winner'] as $oneMeal) {
-                    if (end($meal['winner']) == $oneMeal) {
-                        echo $oneMeal;
-                        continue;
-                    }
-                    echo $oneMeal . ", ";
+function findLoser(array $famousMeals) : array {
+    $loser = [];
+    for($i = 2000; $i < 2023; $i++) {
+        $loser[$i] = $i;
+    }
+    foreach ($famousMeals as $meal) {
+        if (is_array($meal['winner'])) {
+            foreach ($meal['winner'] as $year) {
+                if (in_array($year, $loser)) {
+                    unset($loser[$year]);
                 }
-            } else {
-                echo $meal['winner'];
+            }
+        } else {
+            if (in_array($meal['winner'], $loser)) {
+                unset($loser[$meal['winner']]);
             }
         }
-        ?>
-    </ol>
-    <p> Keine Gewinner zwischen Jahren 2000 und 2022 gab es in Jahren:
-        <?php
-        $noWinnerYears = noWinner($famousMeals);
-        foreach ($noWinnerYears as $value) {
-            echo "<br>" . $value;
-        }
-        ?>
-    </p>
-</form>
+    }
+    return $loser;
+}
+
+echo "<ol>";
+foreach ($famousMeals as $meal) {
+    echo "<li style='margin-top: 10px; padding-left: 5px;'>" . $meal['name'] ;
+    if (is_array($meal['winner']) == 1) {
+        //print_r($meal['winner']);
+        $meal['winner'] = reverseWinner($meal['winner']);
+        //print_r($meal['winner']);
+        echo "<br>".implode(', ', $meal['winner']). "</li>";
+    } else {
+        echo "<br>".$meal['winner'] . "</li>";
+    }
+}
+echo "</ol>";
+echo "<div> Loser : ". implode(', ', findLoser($famousMeals)) ."</div>";

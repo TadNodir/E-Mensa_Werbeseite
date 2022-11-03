@@ -5,6 +5,7 @@
  * Nodirjon, Tadjiev, 3527449
  */
 include 'foodList.php';
+
 echo "Test";
 
 $nameErr = $emailErr = "";
@@ -28,11 +29,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($_POST["email"])) {
         $emailErr = "Bitte Email Addresse eingeben";
-    } else {
+    }
+    else {
         $email = legit_input($_POST["email"]);
 
         // check if e-mail address is well-formed
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strpos($email, "rcpt.at") ||
+            strpos($email, "damnthespam.at") || strpos($email, "wegwerfmail.de") ||
+            strpos($email, "trashmail.at") || strpos($email, "trashmail.com")) {
             $emailErr = "Falsche Email Eingabe";
         } else {
             $userData[1] = $email;
@@ -52,7 +56,7 @@ function legit_input($data)
 }
 
 
-$file = fopen('./newsletterData.txt', 'w');
+$file = fopen('./newsletterData.txt', 'a');
 if (!$file) {
     die('Öffnen fehlgeschlagen');
 }
