@@ -1,9 +1,10 @@
-/**
-* Praktikum DBWT. Autoren:
-* Daniel, Winata, 3525700
-* Nodirjon, Tadjiev, 3527449
-*/
 <?php
+/**
+ * Praktikum DBWT. Autoren:
+ * Daniel, Winata, 3525700
+ * Nodirjon, Tadjiev, 3527449
+ */
+
 $famousMeals = [
     1 => ['name' => 'Currywurst mit Pommes',
         'winner' => [2001, 2003, 2007, 2010, 2020]],
