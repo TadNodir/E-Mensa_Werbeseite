@@ -397,7 +397,7 @@ fclose($file);
                     </div>
                     <div class="info">
                         <label for="email">E-Mail:<sup>*</sup></label><br>
-                        <input type="text" id="email" name="email" placeholder="name@example.com"
+                        <input type="email" id="email" name="email" placeholder="name@example.com"
                                size="35" required><br>
                         <span class="error"><?php echo $emailErr; ?></span>
                     </div>
