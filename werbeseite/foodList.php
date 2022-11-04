@@ -1,4 +1,9 @@
 <?php
+/**
+ * Praktikum DBWT. Autoren:
+ * Daniel, Winata, 3525700
+ * Nodirjon, Tadjiev, 3527449
+ */
 $foodList = [
     [
         'name' => 'Rindfleisch mit Bambus, Kaiserschoten und rotem Paprika, dazu Mie Nudeln',
