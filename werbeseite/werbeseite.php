@@ -8,9 +8,9 @@ include 'foodList.php';
 
 echo "Test";
 
-$nameErr = $emailErr = "";
+$nameErr = $emailErr = $langErr = $agbErr = "";
 $name = $email = "";
-$successName = $successEmail = false;
+$successName = $successEmail = $successLang = $successAgb = false;
 $userData = [];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -26,11 +26,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $successName = true;
         }
     }
-
     if (empty($_POST["email"])) {
         $emailErr = "Bitte Email Addresse eingeben";
-    }
-    else {
+    } else {
         $email = legit_input($_POST["email"]);
 
         // check if e-mail address is well-formed
@@ -43,8 +41,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $successEmail = true;
         }
     }
-    $userData[2] = $_POST['language'];
-    $userData[3] = $_POST['agb'];
+    if (empty($_POST["language"])) {
+        $langErr = "Bitte Sprache eingeben";
+    } else {
+        if ($_POST['language'] == "Deutsch" || $_POST['language'] == "Englisch" || $_POST['language'] ==
+            "Spanisch") {
+            $userData[2] = $_POST['language'];
+            $successLang = true;
+        } else {
+            $langErr = "Falsche Spracheingabe";
+        }
+    }
+    if (empty($_POST["agb"])) {
+        $agbErr = "Bitte Datenschutzbedingungen zustimmen";
+    } else {
+        if ($_POST['agb']) {
+            $userData[3] = $_POST['agb'];
+            $successAgb = true;
+        } else {
+            $agbErr = "Falsche Eingabe der Datenschutzbedingungen";
+        }
+    }
 }
 
 function legit_input($data)
@@ -61,7 +78,11 @@ if (!$file) {
     die('Öffnen fehlgeschlagen');
 }
 foreach ($userData as $info) {
-    $line = "$info\n";
+    if ($info == end($userData)) {
+        $line = "$info\n";
+    } else {
+        $line = "$info:";
+    }
     fwrite($file, $line);
 }
 fclose($file);
@@ -359,16 +380,12 @@ fclose($file);
             </tr>
             <?php
             $foodList = include "foodList.php";
-            $imgDir = scandir('C:\Users\tadno\PhpstormProjects\E-Mensa_Werbeseite\E-Mensa_Werbeseite\werbeseite\img');
-            $images = [];
-            for ($i = 2; $i < 6; $i++) {
-                $images[] = trim("\werbeseite\img\ ") . $imgDir[$i];
-            }
-            for ($i = 0; $i < 4; $i++) {
-                echo "<tr><td>{$foodList[$i]['name']}</td>
-                     <td>{$foodList[$i]['price_intern']} &euro;</td>
-                     <td>{$foodList[$i]['price_extern']} &euro;</td>
-                     <td><img src='$images[$i]' width='100px' height='70px'></td>
+
+            foreach ($foodList as $food) {
+                echo "<tr><td>{$food['name']}</td>
+                     <td>{$food['price_intern']} &euro;</td>
+                     <td>{$food['price_extern']} &euro;</td>
+                     <td><img src={$food['image']} width='100px' height='70px'></td>
                  </tr>";
             }
             ?>
@@ -408,11 +425,13 @@ fclose($file);
                             <option value="Englisch">Englisch</option>
                             <option value="Spanisch">Spanisch</option>
                         </select>
+                        <span class="error"><?php echo $langErr; ?></span>
                     </div>
                 </div>
                 <div class="info">
                     <input type="checkbox" id="scales" name="agb" required>
                     <label for="scales">Den Datenschutzbestimmungen stimme ich zu<sup>*</sup></label>
+                    <span class="error"><?php echo $agbErr; ?></span>
                 </div>
                 <br>
                 <div class="info">
