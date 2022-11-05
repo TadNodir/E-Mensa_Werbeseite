@@ -443,7 +443,7 @@ fclose($file);
                 </div>
             </fieldset>
         </form>
-        <span class="successMessage"><?php if ($successName && $successEmail) {
+        <span class="successMessage"><?php if ($successName && $successEmail && $successAgb && $successLang) {
                 echo "Daten erfolgreich gespeichert.";
             } ?></span>
         <h2 id="wichtig">Das ist uns wichtig!</h2>
