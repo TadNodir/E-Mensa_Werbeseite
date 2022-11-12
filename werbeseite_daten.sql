@@ -92,8 +92,35 @@ INSERT INTO `gericht_hat_kategorie` (`kategorie_id`, `gericht_id`) VALUES
 
 SHOW TABLES;
 
-SELECT COUNT(*) FROM allergen;
-SELECT COUNT(*) FROM gericht;
-SELECT COUNT(*) FROM gericht_hat_allergen;
-SELECT COUNT(*) FROM gericht_hat_kategorie;
-SELECT COUNT(*) FROM kategorie;
+SELECT COUNT(*) AS allergen_amount FROM allergen;
+SELECT COUNT(*) AS gericht_amount FROM gericht;
+SELECT COUNT(*) AS gericht_hat_allergen_amount FROM gericht_hat_allergen;
+SELECT COUNT(*) AS gericht_hat_kategorie_amount FROM gericht_hat_kategorie;
+SELECT COUNT(*) AS kategorie_amount FROM kategorie;
+
+/**
+  alle Daten aller Gerichte
+ */
+SELECT * FROM gericht;
+
+SELECT erfasst_am FROM gericht;
+
+SELECT erfasst_am, name AS Gerichtname FROM gericht ORDER BY Gerichtname desc;
+
+SELECT name, beschreibung FROM gericht ORDER BY name LIMIT 5;
+
+SELECT name, beschreibung FROM gericht ORDER BY name LIMIT 5 OFFSET 5;
+
+SELECT DISTINCT typ FROM allergen;
+
+SELECT name FROM gericht WHERE name LIKE 'K%';
+
+SELECT id, name FROM gericht WHERE name LIKE '%suppe%';
+
+SELECT * FROM kategorie WHERE eltern_id IS NULL;
+
+UPDATE allergen SET name = 'Kamut' WHERE code = 'a6';
+
+INSERT INTO gericht (name, beschreibung, erfasst_am, vegetarisch, vegan, preis_intern, preis_extern)
+VALUES ('Currywurst mit Pommes', 'Currywurst mit Pommes und Ketchunez','2020-08-23', 0, 0, 2, 3);
+INSERT INTO gericht_hat_kategorie (gericht_id, kategorie_id) VALUES (21, 3);
