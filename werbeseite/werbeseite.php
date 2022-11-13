@@ -72,6 +72,11 @@ function legit_input($data)
     return $data;
 }
 
+$imgDir = scandir('C:\Users\tadno\PhpstormProjects\E-Mensa_Werbeseite\E-Mensa_Werbeseite\werbeseite\img');
+$images = [];
+for ($i = 1; $i < 7; $i++) {
+    $images[] = trim("\werbeseite\img\ ") . $imgDir[$i];
+}
 
 $file = fopen('./newsletterData.txt', 'a');
 if (!$file) {
@@ -86,7 +91,6 @@ foreach ($userData as $info) {
     fwrite($file, $line);
 }
 fclose($file);
-
 ?>
 
 <!DOCTYPE html>
@@ -377,22 +381,61 @@ fclose($file);
                 <td>Preis intern</td>
                 <td>Preis extern</td>
                 <td>Bilder</td>
+                <td>Allergene</td>
             </tr>
             <?php
-            $foodList = include "foodList.php";
+            $link=mysqli_connect("localhost", // Host der Datenbank
+                "root",                 // Benutzername zur Anmeldung
+                "root",    // Passwort
+                "emensawerbeseite"      // Auswahl der Datenbanken (bzw. des Schemas)
+            );
 
-            foreach ($foodList as $food) {
-                echo "<tr><td>{$food['name']}</td>
-                     <td>{$food['price_intern']} &euro;</td>
-                     <td>{$food['price_extern']} &euro;</td>
-                     <td><img src={$food['image']} width='100px' height='70px'></td>
-                 </tr>";
+            if (!$link) {
+                echo "Verbindung fehlgeschlagen: ", mysqli_connect_error();
+                exit();
             }
+
+            $sql = "SELECT gericht.name AS name, gericht.preis_intern AS preis_intern, gericht.preis_extern AS
+    preis_extern, GROUP_CONCAT(gericht_hat_allergen.code) AS code, allergen.name AS allergen FROM gericht LEFT JOIN
+        gericht_hat_allergen ON gericht.id = gericht_hat_allergen.gericht_id LEFT JOIN allergen 
+            ON allergen.code = gericht_hat_allergen.code GROUP BY gericht.name LIMIT 5;";
+            //$sqlAllergene = "SELECT code FROM gericht_hat_allergen WHERE ";
+
+            $result = mysqli_query($link, $sql);
+            if (!$result) {
+                echo "Fehler während der Abfrage:  ", mysqli_error($link);
+                exit();
+            }
+            $allergenRow = [];
+            $j = 1;
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<tr><td>{$row['name']}</td>
+                     <td>{$row['preis_intern']} &euro;</td>
+                     <td>{$row['preis_extern']} &euro;</td>
+                     <td><img src={$images[$j]} width='100px' height='70px'></td>
+                     <td>{$row['code']}</td>
+                 </tr>";
+                $allergenRow[] = $row['allergen'];
+                $j++;
+            }
+            mysqli_free_result($result);
+            mysqli_close($link);
             ?>
         </table>
+        <span>Verwendete Allergen: </span>
+        <?php
+        foreach ($allergenRow as $allergie) {
+            if (!empty($allergie)) {
+                if ($allergie == end($allergenRow)) {
+                    echo $allergie;
+                } else {
+                    echo $allergie . ", ";
+                }
+            }
+        }
+        ?>
 
         <h2>E-Mensa in Zahlen</h2>
-
         <div id="zahlen" class="inNumbers">
             <ul>
                 <li>X Besuche</li>
