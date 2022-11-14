@@ -124,3 +124,19 @@ UPDATE allergen SET name = 'Kamut' WHERE code = 'a6';
 INSERT INTO gericht (name, beschreibung, erfasst_am, vegetarisch, vegan, preis_intern, preis_extern)
 VALUES ('Currywurst mit Pommes', 'Currywurst mit Pommes und Ketchunez','2020-08-23', 0, 0, 2, 3);
 INSERT INTO gericht_hat_kategorie (gericht_id, kategorie_id) VALUES (21, 3);
+
+SELECT * FROM gericht g INNER JOIN gericht_hat_allergen gha ON g.id = gha.gericht_id INNER JOIN allergen a ON a.code = gha.code;
+
+SELECT * FROM gericht g LEFT JOIN gericht_hat_allergen gha ON g.id = gha.gericht_id LEFT JOIN allergen a ON a.code = gha.code;
+
+SELECT * FROM gericht g RIGHT JOIN gericht_hat_allergen gha ON g.id = gha.gericht_id RIGHT JOIN allergen a ON a.code = gha.code;
+
+SELECT kategorie.name AS name, COUNT(gericht.name) AS mealAmount FROM kategorie LEFT JOIN gericht_hat_kategorie ON
+    kategorie_id = kategorie.id LEFT JOIN gericht ON gericht_id = gericht.id GROUP BY name ORDER BY mealAmount;
+
+SELECT kategorie.name AS name, COUNT(gericht.name) AS mealAmount FROM kategorie LEFT JOIN gericht_hat_kategorie ON
+        kategorie_id = kategorie.id LEFT JOIN gericht ON gericht_id = gericht.id GROUP BY name HAVING mealAmount > 2 ORDER BY mealAmount;
+
+SELECT gericht.id, gericht.name, COUNT(allergen.name) AS amount, GROUP_CONCAT(gericht_hat_allergen.code) AS codes FROM gericht
+    LEFT JOIN gericht_hat_allergen ON gericht.id = gericht_hat_allergen.gericht_id INNER JOIN allergen ON gericht_hat_allergen.code = allergen.code
+GROUP BY gericht.name HAVING amount > 3 ORDER BY amount;

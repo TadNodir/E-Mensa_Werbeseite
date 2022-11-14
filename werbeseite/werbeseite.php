@@ -399,7 +399,6 @@ fclose($file);
     preis_extern, GROUP_CONCAT(gericht_hat_allergen.code) AS code, allergen.name AS allergen FROM gericht LEFT JOIN
         gericht_hat_allergen ON gericht.id = gericht_hat_allergen.gericht_id LEFT JOIN allergen 
             ON allergen.code = gericht_hat_allergen.code GROUP BY gericht.name LIMIT 5;";
-            //$sqlAllergene = "SELECT code FROM gericht_hat_allergen WHERE ";
 
             $result = mysqli_query($link, $sql);
             if (!$result) {
