@@ -140,3 +140,5 @@ SELECT kategorie.name AS name, COUNT(gericht.name) AS mealAmount FROM kategorie 
 SELECT gericht.id, gericht.name, COUNT(allergen.name) AS amount, GROUP_CONCAT(gericht_hat_allergen.code) AS codes FROM gericht
     LEFT JOIN gericht_hat_allergen ON gericht.id = gericht_hat_allergen.gericht_id INNER JOIN allergen ON gericht_hat_allergen.code = allergen.code
 GROUP BY gericht.name HAVING amount > 3 ORDER BY amount;
+
+SELECT * FROM pages;
