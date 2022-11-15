@@ -6,7 +6,6 @@
  */
 include 'foodList.php';
 
-session_start();
 //echo "Test";
 
 $nameErr = $emailErr = $langErr = $agbErr = "";
