@@ -6,7 +6,7 @@
  */
 include 'foodList.php';
 
-echo "Test";
+//echo "Test";
 
 $nameErr = $emailErr = $langErr = $agbErr = "";
 $name = $email = "";
@@ -82,15 +82,38 @@ $file = fopen('./newsletterData.txt', 'a');
 if (!$file) {
     die('Öffnen fehlgeschlagen');
 }
-foreach ($userData as $info) {
-    if ($info == end($userData)) {
-        $line = "$info\n";
-    } else {
-        $line = "$info:";
+if (sizeof($userData) == 4) {
+    foreach ($userData as $info) {
+        if ($info == end($userData)) {
+            $line = "$info\n";
+        } else {
+            $line = "$info:";
+        }
+        fwrite($file, $line);
     }
-    fwrite($file, $line);
 }
 fclose($file);
+
+
+function total_views($conn)
+{
+    $query = "SELECT total_views AS total_views FROM pages WHERE id = 1;";
+    $result = mysqli_query($conn, $query);
+    if (!$result) {
+        echo "Fehler während der Abfrage:  ", mysqli_error($conn);
+        exit();
+    }
+    $row = mysqli_fetch_row($result);
+    $number = $row[0];
+
+    $query = "UPDATE pages SET total_views = total_views + 1 WHERE id = 1";
+    if (!mysqli_query($conn, $query)) {
+        echo "Fehler während der Abfrage:  ", mysqli_error($conn);
+        exit();
+    }
+    return $number;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -384,7 +407,7 @@ fclose($file);
                 <td>Allergene</td>
             </tr>
             <?php
-            $link=mysqli_connect("localhost", // Host der Datenbank
+            $link = mysqli_connect("localhost", // Host der Datenbank
                 "root",                 // Benutzername zur Anmeldung
                 "root",    // Passwort
                 "emensawerbeseite"      // Auswahl der Datenbanken (bzw. des Schemas)
@@ -436,11 +459,51 @@ fclose($file);
 
         <h2>E-Mensa in Zahlen</h2>
         <div id="zahlen" class="inNumbers">
-            <ul>
-                <li>X Besuche</li>
-                <li>Y Anmeldungen zum Newsletter</li>
-                <li>Z Speisen</li>
-            </ul>
+
+            <?php
+            $abonnentAmount = 0;
+            $newsletterFile = fopen('./newsletterData.txt', 'r');
+            if (!$newsletterFile) {
+                die('Öffnen fehlgeschlagen');
+            }
+            while (!feof($newsletterFile)) {
+                $line = fgets($newsletterFile, 1024);
+                if (!empty($line)) {
+                    $abonnentAmount++;
+                }
+            }
+            fclose($newsletterFile);
+
+            $link = mysqli_connect("localhost", // Host der Datenbank
+                "root",                 // Benutzername zur Anmeldung
+                "root",    // Passwort
+                "emensawerbeseite"      // Auswahl der Datenbanken (bzw. des Schemas)
+            // optional port der Datenbank
+            );
+
+            if (!$link) {
+                echo "Verbindung fehlgeschlagen: ", mysqli_connect_error();
+                exit();
+            }
+
+            $mealNumber = "SELECT COUNT(gericht.name) AS amount FROM gericht";
+
+            $result = mysqli_query($link, $mealNumber);
+            if (!$result) {
+                echo "Fehler während der Abfrage:  ", mysqli_error($link);
+                exit();
+            }
+            $speisen = mysqli_fetch_assoc($result);
+            $totalViews = total_views($link);
+
+            echo '<ul><li>', $totalViews, " Besuche", "</li>",
+            "<li>", $abonnentAmount, " Anmeldungen zum Newsletter", "</li>",
+            "<li>", $speisen['amount'], " Speisen", "</li></ul>";
+
+            mysqli_free_result($result);
+            mysqli_close($link);
+            ?>
+
         </div>
 
         <h2 id="kontakt">Interesse geweckt? Wir informieren Sie!</h2>
