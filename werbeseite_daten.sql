@@ -142,3 +142,19 @@ SELECT gericht.id, gericht.name, COUNT(allergen.name) AS amount, GROUP_CONCAT(ge
 GROUP BY gericht.name HAVING amount > 3 ORDER BY amount;
 
 SELECT * FROM pages;
+
+CREATE TABLE wunschgericht (
+                               id INT8 PRIMARY KEY AUTO_INCREMENT,
+                               name VARCHAR(80) NOT NULL,
+                               beschreibung VARCHAR(80) NOT NULL,
+                               datum DATE NOT NULL
+);
+
+CREATE TABLE ersteller (
+                           name VARCHAR(80) NOT NULL,
+                           mail VARCHAR(80) NOT NULL,
+                           besitzt_wg INT8 NOT NULL REFERENCES wunschgericht(id)
+);
+
+ALTER TABLE ersteller
+    ALTER name SET DEFAULT 'anonym';

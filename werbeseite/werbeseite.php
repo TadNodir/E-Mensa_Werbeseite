@@ -353,6 +353,11 @@ function total_views($conn)
             font-weight: bold;
         }
 
+        span + a {
+            font-weight: 400;
+            font-size: 30px;
+        }
+
     </style>
 </head>
 <body>
@@ -469,42 +474,7 @@ function total_views($conn)
                 echo '</tr>';
                 $i = $i + 1;
             }
-//            $link = mysqli_connect("localhost", // Host der Datenbank
-//                "root",                 // Benutzername zur Anmeldung
-//                "root",    // Passwort
-//                "emensawerbeseite"      // Auswahl der Datenbanken (bzw. des Schemas)
-//            );
-//
-//            if (!$link) {
-//                echo "Verbindung fehlgeschlagen: ", mysqli_connect_error();
-//                exit();
-//            }
-//
-//            $sql = "SELECT gericht.name AS name, gericht.preis_intern AS preis_intern, gericht.preis_extern AS
-//    preis_extern, GROUP_CONCAT(gericht_hat_allergen.code) AS code, allergen.name AS allergen FROM gericht LEFT JOIN
-//        gericht_hat_allergen ON gericht.id = gericht_hat_allergen.gericht_id LEFT JOIN allergen
-//            ON allergen.code = gericht_hat_allergen.code GROUP BY gericht.name LIMIT 5;";
-//
-//            $result = mysqli_query($link, $sql);
-//            if (!$result) {
-//                echo "Fehler während der Abfrage:  ", mysqli_error($link);
-//                exit();
-//            }
-//            $allergenRow = [];
-//            $j = 1;
-//            while ($row = mysqli_fetch_assoc($result)) {
-//                echo "<tr><td>{$row['name']}</td>
-//                     <td>{$row['preis_intern']} &euro;</td>
-//                     <td>{$row['preis_extern']} &euro;</td>
-//                     <td><img src={$images[$j]} width='100px' height='70px'></td>
-//                     <td>{$row['code']}</td>
-//                 </tr>";
-//                $allergenRow[] = $row['allergen'];
-//                $j++;
-//            }
-//            mysqli_free_result($result);
-//            mysqli_close($link);
-//            ?>
+            ?>
         </table>
         <?php
         // Liste der verwendeten Allergene
@@ -635,6 +605,7 @@ function total_views($conn)
             </ul>
         </div>
         <h2>Wir freuen uns auf Ihren Besuch!</h2>
+        <span></span><a href="wunschgericht.php">Wunschgericht bestellen!</a></span>
     </div>
     <div></div>
 </main>
