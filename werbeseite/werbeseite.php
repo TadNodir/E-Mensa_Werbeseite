@@ -11,12 +11,13 @@ $nameErr = $emailErr = $langErr = $agbErr = "";
 $name = $email = "";
 $successName = $successEmail = $successLang = $successAgb = false;
 $userData = [];
-
+const ALLOWED_LANGS = ['Deutsch', 'Englisch', 'Spanisch'];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST["vorname"])) {
         $nameErr = "Bitte den Namen eingeben";
     } else {
         $name = legit_input($_POST["vorname"]);
+        $name = htmlspecialchars($name);
         // check if name only contains letters and whitespace
         if (!preg_match("/^([a-zA-Z' ]+)$/", $name)) {
             $nameErr = "Falsche Namenseingabe";
@@ -29,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $emailErr = "Bitte Email Addresse eingeben";
     } else {
         $email = legit_input($_POST["email"]);
-
+        $email = htmlspecialchars($email);
         // check if e-mail address is well-formed
         if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strpos($email, "rcpt.at") ||
             strpos($email, "damnthespam.at") || strpos($email, "wegwerfmail.de") ||
@@ -43,9 +44,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST["language"])) {
         $langErr = "Bitte Sprache eingeben";
     } else {
-        if ($_POST['language'] == "Deutsch" || $_POST['language'] == "Englisch" || $_POST['language'] ==
-            "Spanisch") {
-            $userData[2] = $_POST['language'];
+         // Whitelist
+        $language = 'Deutsch';
+        if ( ($pos = array_search($_POST['language'], ALLOWED_LANGS)) !== false) {
+            $language = ALLOWED_LANGS[$pos];
+            $userData[2] = $language;
             $successLang = true;
         } else {
             $langErr = "Falsche Spracheingabe";
@@ -490,7 +493,7 @@ function total_views($conn)
                 exit();
             }
             while ($row2 = mysqli_fetch_assoc($result2)) {
-                echo '<li class="allergeneCodes">', $row2['code'],' => ' ,$row2['name'], ', Typ :', $row2['typ'],'</li>';
+                echo '<li class="allergeneCodes">', $row2['code'],': ' ,$row2['name'], ', Typ: ', $row2['typ'],'</li>';
             }
         }
         echo "<ol>";
@@ -605,7 +608,7 @@ function total_views($conn)
             </ul>
         </div>
         <h2>Wir freuen uns auf Ihren Besuch!</h2>
-        <span></span><a href="wunschgericht.php">Wunschgericht bestellen!</a></span>
+        <span><a href="wunschgericht.php">Wunschgericht bestellen!</a></span>
     </div>
     <div></div>
 </main>
