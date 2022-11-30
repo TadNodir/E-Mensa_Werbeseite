@@ -158,3 +158,46 @@ CREATE TABLE ersteller (
 
 ALTER TABLE ersteller
     ALTER name SET DEFAULT 'anonym';
+
+ALTER TABLE gericht_hat_kategorie
+    ADD CONSTRAINT PRIMARY KEY (gericht_id, kategorie_id);
+
+SELECT * FROM gericht_hat_kategorie;
+CREATE INDEX gericht_name_asc  USING BTREE ON gericht(name ASC);
+SELECT * FROM gericht WHERE name='Mousse au Chocolat';
+ALTER TABLE gericht DROP INDEX gericht_name_asc;
+
+ANALYZE
+    SELECT * FROM gericht WHERE name='Käsebrötchen';
+
+SHOW GLOBAL VARIABLES LIKE 'FOREIGN_KEY_CHECKS';
+SET GLOBAL FOREIGN_KEY_CHECKS=0;
+SET FOREIGN_KEY_CHECKS=0;
+SET GLOBAL FOREIGN_KEY_CHECKS=1;
+SET FOREIGN_KEY_CHECKS=1;
+
+ALTER TABLE gericht_hat_kategorie
+    ADD CONSTRAINT id_ghk_g
+        FOREIGN KEY (gericht_id)
+            REFERENCES gericht(id) ON UPDATE CASCADE ON DELETE CASCADE ;
+
+
+ALTER TABLE gericht_hat_kategorie
+    ADD CONSTRAINT id_ghk_k
+        FOREIGN KEY (kategorie_id)
+            REFERENCES kategorie(id) ON UPDATE CASCADE ON DELETE RESTRICT ;
+
+ALTER TABLE gericht_hat_allergen
+    ADD CONSTRAINT id_gha_g
+        FOREIGN KEY (gericht_id)
+            REFERENCES gericht(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE gericht_hat_allergen
+    ADD CONSTRAINT code_gha_a
+        FOREIGN KEY (code)
+            REFERENCES allergen(code) ON UPDATE CASCADE ON DELETE RESTRICT ;
+
+ALTER TABLE kategorie
+    ADD CONSTRAINT kind_k_k
+        FOREIGN KEY (eltern_id)
+            REFERENCES kategorie(id) ON UPDATE CASCADE ON DELETE RESTRICT ;
