@@ -1,15 +1,21 @@
 <?php
 
-$gericht = $beschreibung = $date = $name = $mail = "";
+$gericht = $beschreibung = $date = $mail = "";
+$name = "anonym";
 
 if (isset($_POST['submit'])) {
     $date = date("Y-m-d");
-    if (!empty($_POST['gericht']) && !empty($_POST['beschreibung']) && !empty($_POST['vorname']) &&
-        !empty($_POST['email'])) {
+    if (!empty($_POST['gericht'])) {
         $gericht = $_POST['gericht'];
+    }
+    if (!empty($_POST['beschreibung'])) {
         $beschreibung = $_POST['beschreibung'];
-        $name = $_POST['vorname'];
+    }
+    if (!empty($_POST['email'])) {
         $mail = $_POST['email'];
+    }
+    if (!empty($_POST['vorname'])) {
+        $name = $_POST['vorname'];
     }
 
     $link = mysqli_connect(
@@ -36,8 +42,7 @@ if (isset($_POST['submit'])) {
     mysqli_stmt_prepare($statement,
         "INSERT INTO ersteller (name, mail, besitzt_wg) VALUES (?, ?, (SELECT id FROM wunschgericht WHERE name = ?));");
 
-    mysqli_stmt_bind_param($statement, 'sss',
-        $_POST['vorname'], $_POST['email'], $_POST['gericht']);
+    mysqli_stmt_bind_param($statement, 'sss', $name, $mail, $gericht);
     mysqli_stmt_execute($statement);
 
     echo "Wunschgericht erfolgreich gespeichert!";
@@ -99,7 +104,7 @@ if (isset($_POST['submit'])) {
     }
     $statement = mysqli_stmt_init($link);
     mysqli_stmt_prepare($statement,
-        "SELECT * FROM wunschgericht LIMIT 5;");
+        "SELECT * FROM wunschgericht ORDER BY datum DESC LIMIT 5;");
     mysqli_stmt_execute($statement);
     $result = mysqli_stmt_get_result($statement);
     while ($data = mysqli_fetch_array($result)) {

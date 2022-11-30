@@ -1,0 +1,230 @@
+/*
+        All children of main tag have to have these characteristics
+        we want to center here all the elements in main and use they in full wide
+         */
+main > * {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+}
+
+/*
+Removing margin from the body, in order not to have the margin between header and sides
+ */
+body {
+    margin: 0;
+}
+
+/*
+Header
+The header container is designed with help of grid, where we assign each word in menu as a column
+'sticky' places the header according to the normal flow of the document
+Here and further we used vw as a unit of measurement to do the website more responsive and depending
+on the page size
+ */
+.header-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    position: sticky;
+    padding: 0.8vw;
+    border-bottom: teal solid;
+    background-color: teal;
+}
+
+/*
+Logo of the Mensa
+Radius is 50%, to make the logo round
+Placing it in center as it is a child item of a grid
+Not allowing to get bigger/smaller restricting the max/min sizes
+ */
+.header-item1 {
+    border-radius: 50%;
+    place-self: center;
+    max-width: 25%;
+    min-width: 20%;
+}
+
+/*
+List of menu containing
+placing the menu words as they are a grid children and stretching them
+ */
+.header-item2 {
+    padding: 0.7vw;
+    place-self: center stretch;
+    margin: 1vw;
+}
+
+/*
+Each word of the menu
+Displaying inline, as otherwise they are displayed as a list
+ */
+.header-item2 > li {
+    list-style: none;
+    display: inline;
+    margin: 0.7vw;
+    color: white;
+    font-size: 2.2vw;
+}
+
+/*
+Headers for each menu section
+Setting one font size for all menu headers
+ */
+h2 {
+    font-size: 2.5vw;
+}
+
+/*
+If not pressed the link, be dark grey
+ */
+a:link {
+    color: darkgrey;
+}
+
+/*
+If already visited the link, be black
+ */
+a:visited {
+    color: black;
+}
+
+/*
+Designing the main content of the page as a grid
+ */
+.main-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+}
+
+/*
+Central column
+the distance between the header and main content
+ */
+.centerCol {
+    padding-top: 4vw;
+}
+
+/*
+Rectangle picture of the food table
+ */
+.top-picture {
+    width: 50vw;
+    height: 30vw;
+}
+
+/*
+Lorem ipsum text in the middle
+ */
+p {
+    border: solid 2px black;
+    padding: 1em;
+    font-size: 1vw;
+}
+
+/*
+Table with prices made relative to column full width
+Aligning text to the center
+ */
+table, th, td {
+    width: 100%;
+    border: 1px solid;
+    padding: 0.5em;
+    text-align: center;
+    font-size: 1vw;
+}
+
+/*
+Mensa in numbers
+List displayed inline and aligned to the center
+ */
+.inNumbers ul li {
+    display: inline;
+    font-size: 1.7vw;
+    text-align: center;
+}
+
+/*
+first and second words have a margin between each other
+ */
+.inNumbers ul li:nth-of-type(1), .inNumbers ul li:nth-of-type(2) {
+    margin-right: 4%;
+}
+
+/*
+Two input tags and one select tag designed as flex rows and leaving between them space evenly
+ */
+.inputContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+/*
+All children of form, input and select tag have to have the font size depending of page size
+ */
+form > *, input, select {
+    font-size: 1vw;
+}
+
+/*
+All elements of the form
+ */
+.info {
+    margin: 3px;
+    align-self: center;
+}
+
+/*
+List of important things aligned left
+ */
+.wichtig-list > ul > li {
+    text-align: left;
+    font-size: 1vw;
+}
+
+/*
+The footer text is aligned to the center and has a distance to the List of important things
+ */
+footer {
+    text-align: center;
+    margin-top: 4vw;
+    border-top: 1px solid black;
+    font-size: 1vw;
+}
+
+/*
+Each word of the footer list displayed inlined
+ */
+footer li {
+    display: inline;
+    margin-right: 5em;
+}
+
+/*
+First and second words have a distance between each other and border
+ */
+footer ul li:nth-of-type(1), footer ul li:nth-of-type(2) {
+    border-right: 2px solid black;
+    padding-right: 5vw;
+}
+
+/*
+Input tags with these name values have to have relative width of 80%
+ */
+[name="language"], [name="benutzer"] {
+    width: 80%;
+}
+
+.error {
+    color: #FF0000;
+}
+
+.successMessage {
+    color: green;
+    font-weight: bold;
+}
+
+span + a {
+    font-weight: 400;
+    font-size: 30px;
+}
