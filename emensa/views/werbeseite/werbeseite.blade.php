@@ -6,6 +6,7 @@
     <img class="top-picture" src="/img/food.jpg" alt="food picture">
     <br>
     <h2 id="ankündigung">Bald gibt es Essen auch online ;)</h2>
+    {{var_dump($_SESSION)}}
     <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
         dolore magna aliqua. Egestas fringilla phasellus faucibus scelerisque eleifend. Amet cursus sit amet dictum

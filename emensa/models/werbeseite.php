@@ -28,10 +28,9 @@ function db_gericht_allergen_pair() {
 
     $sql = "SELECT name, GROUP_CONCAT(code) as allergen_codes, preis_intern, preis_extern
         FROM gericht_hat_allergen
-        RIGHT JOIN gericht as gericht
+        INNER JOIN gericht as gericht
         ON gericht_hat_allergen.gericht_id = gericht.id
         GROUP BY id
-        ORDER BY  RAND()
         LIMIT 5";
 
     $res_gericht_allergen_pair = mysqli_query($link, $sql);
