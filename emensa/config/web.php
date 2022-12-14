@@ -21,5 +21,8 @@ return array(
     '/m4_7b_kategorie' => 'ExampleController@m4_7b_kategorie',
     '/m4_7c_gerichte' => 'ExampleController@m4_7c_gerichte',
     '/m4_7d_layout' => 'ExampleController@m4_7d_layout',
-    '/werbeseite' => 'WerbeseiteController@werbeseite'
+    '/werbeseite' => 'WerbeseiteController@werbeseite',
+    '/anmeldung' => 'WerbeseiteController@anmelden',
+    '/anmeldung_verifizieren' => 'WerbeseiteController@verify',
+    '/abmeldung' => 'WerbeseiteController@werbeseite'
 );

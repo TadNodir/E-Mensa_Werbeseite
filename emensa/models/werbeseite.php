@@ -104,5 +104,117 @@ function db_anzahl_besucher() {
     }
 
     mysqli_close($link);
-    return $res_anzahl_besucher ;
+    return $res_anzahl_besucher;
+}
+
+
+function verifyUser () {
+    if (isset($_POST['email']) && isset($_POST['password'])) {
+        if (!empty($_POST['email']) && !empty($_POST['password'])) {
+            $email = htmlspecialchars($_POST['email']);
+            $password = htmlspecialchars($_POST['password']);
+            $hashKeyPassword = sha1('saltbae' . $password);
+
+            $link = connectdb();
+            $sql = "SELECT * FROM benutzer WHERE email = '$email' AND passwort = '$hashKeyPassword'";
+
+            $userData = mysqli_query($link, $sql);
+
+            if (!$userData) {
+                echo "Fehler während der Abfrage:  ", mysqli_error($link);
+                exit();
+            }
+            $userInfoRow = mysqli_fetch_row($userData);
+
+            mysqli_close($link);
+            return !is_null($userInfoRow);
+        }
+    }
+}
+
+function incrementLoginAmount (): void
+{
+    $link = connectdb();
+
+    $sql = "UPDATE benutzer SET anzahlanmeldungen = anzahlanmeldungen + 1";
+
+    $increment = mysqli_query($link, $sql);
+
+    if (!$increment) {
+        echo "Fehler während der Abfrage: ", mysqli_error($link);
+        exit();
+    }
+
+    mysqli_close($link);
+}
+
+function lastLoginDate (bool $success) {
+    $link = connectdb();
+    $name = loginName();
+    if ($success) {
+        $sql = "UPDATE benutzer SET letzteanmeldung = NOW() WHERE name = '$name'";
+    } else {
+        $sql = "UPDATE benutzer SET letzterfehler = NOW() WHERE name = '$name'";
+    }
+
+    $login = mysqli_query($link, $sql);
+
+    if (!$login) {
+        echo "Fehler während der Abfrage: ", mysqli_error($link);
+        exit();
+    }
+
+    mysqli_close($link);
+}
+
+function incrementAndLastLogin (bool $success) {
+    $link = connectdb();
+    $name = loginName();
+
+    $link->begin_transaction();
+    try {
+
+        if ($success) {
+            $sql = "UPDATE benutzer SET anzahlanmeldungen = anzahlanmeldungen + 1";
+            mysqli_query($link, $sql);
+            $sql = "UPDATE benutzer SET letzteanmeldung = NOW() WHERE name = '$name[0]'";
+        } else {
+            $sql = "UPDATE benutzer SET letzterfehler = NOW()";
+        }
+        mysqli_query($link, $sql);
+        $link->commit();
+
+    } catch (mysqli_sql_exception $exception) {
+        $link->rollback();
+        throw $exception;
+    }
+
+    mysqli_close($link);
+}
+
+function loginName () {
+
+    if(verifyUser()) {
+
+        $link = connectdb();
+
+        $email = htmlspecialchars($_POST['email']);
+        $password = htmlspecialchars($_POST['password']);
+        $hashKeyPassword = sha1('saltbae' . $password);
+
+        $sql = "SELECT name FROM benutzer WHERE email = '$email' AND passwort = '$hashKeyPassword'";
+
+        $nameStatement = mysqli_query($link, $sql);
+
+        $name = mysqli_fetch_row($nameStatement);
+
+        if (!$name) {
+            echo "Fehler während der Abfrage:  ", mysqli_error($link);
+            exit();
+        }
+
+        mysqli_close($link);
+
+        return $name;
+    }
 }
