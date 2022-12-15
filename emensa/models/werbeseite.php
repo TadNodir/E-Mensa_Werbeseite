@@ -26,7 +26,7 @@ function db_gericht_allergen_pair() {
     $link = connectdb();
 
 
-    $sql = "SELECT name, GROUP_CONCAT(code) as allergen_codes, preis_intern, preis_extern
+    $sql = "SELECT name, bildname, GROUP_CONCAT(code) as allergen_codes, preis_intern, preis_extern
         FROM gericht_hat_allergen
         INNER JOIN gericht as gericht
         ON gericht_hat_allergen.gericht_id = gericht.id
