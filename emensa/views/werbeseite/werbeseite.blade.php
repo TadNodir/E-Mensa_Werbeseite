@@ -51,18 +51,14 @@
 @section('gericht')
 
     @foreach($res_gericht_allergen_pair as $key => $dish)
-
-
         <tr>
             <td><img alt='' class='img-dishes' src=''>{{$dish['name']}}</td>
             <td>{{number_format($dish['preis_intern'], 2,',')}}&euro;</td>
             <td>{{number_format($dish['preis_extern'], 2,',')}}&euro;</td>
-            <td></td>
+            <td><img src="/img/gerichte/{{$dish['bildname']}}.jpg" width="100px" height="100px"></td>
             <td>{{$dish['allergen_codes']}}</td>
         </tr>
     @endforeach
-
-
 
 @endsection
 
