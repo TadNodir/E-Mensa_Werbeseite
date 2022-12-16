@@ -277,3 +277,16 @@ function view($viewname, $viewargs = array())
 
     return $blade->run($viewname, $viewargs);
 }
+
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\FirePHPHandler;
+
+function logger() : Logger {
+    $logger = new Logger('myLogger');
+    // add handlers
+    $logger->pushHandler(new StreamHandler('../storage/logs/werbeseite.log'));
+    $logger->pushHandler(new FirePHPHandler());
+    return $logger;
+}
