@@ -1,0 +1,10 @@
+{
+  "require": {
+    "eftec/bladeone": "^4.1",
+    "ext-mysqli": "*",
+    "monolog/monolog": "^3.2.0"
+  },
+  "config": {
+    "disable-tls": true
+  }
+}

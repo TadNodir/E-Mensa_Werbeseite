@@ -113,6 +113,7 @@ function verifyUser () {
         if (!empty($_POST['email']) && !empty($_POST['password'])) {
             $email = htmlspecialchars($_POST['email']);
             $password = htmlspecialchars($_POST['password']);
+            $_SESSION['user_email'] = $_POST['email'];
             $hashKeyPassword = sha1('saltbae' . $password);
 
             $link = connectdb();
@@ -169,21 +170,31 @@ function lastLoginDate (bool $success) {
 
 function incrementAndLastLogin (bool $success) {
     $link = connectdb();
-    $name = loginName();
-
-    $link->begin_transaction();
     try {
+        $link->begin_transaction();
+        if (isset($_SESSION['user_email'])) {
+            $userEmail = $_SESSION['user_email'];
+            $containsEmail = "SELECT * FROM benutzer WHERE email = '$userEmail'";
+            $emailIsThere = mysqli_query($link, $containsEmail);
+            $row = mysqli_fetch_row($emailIsThere);
+            if ($success) {
+                $_SESSION['login_ok'] = true;
+                mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+                mysqli_query($link, "CALL incrementLogin({$row[0]})");
+//                $sql = "UPDATE benutzer SET anzahlanmeldungen = anzahlanmeldungen + 1";
+//                mysqli_query($link, $sql);
+                $sql = "UPDATE benutzer SET letzteanmeldung = NOW() WHERE email = '$userEmail'";
+                mysqli_query($link, $sql);
+            } else {
+                $_SESSION['login_ok'] = false;
+                if (!empty($row)) {
+                    $sql = "UPDATE benutzer SET letzterfehler = NOW() WHERE email = '$userEmail'";
+                    mysqli_query($link, $sql);
+                }
+            }
 
-        if ($success) {
-            $sql = "UPDATE benutzer SET anzahlanmeldungen = anzahlanmeldungen + 1";
-            mysqli_query($link, $sql);
-            $sql = "UPDATE benutzer SET letzteanmeldung = NOW() WHERE name = '$name[0]'";
-        } else {
-            $sql = "UPDATE benutzer SET letzterfehler = NOW()";
         }
-        mysqli_query($link, $sql);
         $link->commit();
-
     } catch (mysqli_sql_exception $exception) {
         $link->rollback();
         throw $exception;
