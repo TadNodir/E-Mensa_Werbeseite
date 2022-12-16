@@ -38,7 +38,14 @@
         <li><a href="#zahlen">Zahlen</a></li>
         <li><a href="#kontakt">Kontakt</a></li>
         <li><a href="#wichtig">Wichtig für uns</a></li>
+        @if(isset($log))
+            <li><a href="/abmeldung">Abmelden</a></li>
+        @else
+            <li><a href="/anmeldung">Anmelden</a></li>
+        @endif
     </ul>
+    <span>{{$logged}}</span>
+
 @endsection
 
 @section('gericht')

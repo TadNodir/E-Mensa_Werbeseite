@@ -33,6 +33,7 @@ if (preg_match('/\.(?:css|js|png|jpg|jpeg|gif)$/', $_SERVER["REQUEST_URI"])) {
             "<pre>Verbosity-Level: <strong>{$verbosity}</strong></pre>" .
             "<pre>" . print_r($_SERVER, 1) . "</pre><hr>";
     }
+    session_start();
     FrontController::handleRequest("$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]", $_SERVER['REQUEST_METHOD'], VERBOSITY);
 }
 
