@@ -38,8 +38,10 @@
         <li><a href="#zahlen">Zahlen</a></li>
         <li><a href="#kontakt">Kontakt</a></li>
         <li><a href="#wichtig">Wichtig für uns</a></li>
-        @if(isset($log))
+        <li><a href="/bewertungen">Bewertungen</a></li>
+        @if(isset($_SESSION['login_ok']))
             <li><a href="/abmeldung">Abmelden</a></li>
+            <li><a href="/meinebewertungen">Meine Bewertungen</a></li>
         @else
             <li><a href="/anmeldung">Anmelden</a></li>
         @endif
@@ -52,11 +54,14 @@
 
     @foreach($res_gericht_allergen_pair as $key => $dish)
         <tr>
-            <td><img alt='' class='img-dishes' src=''>{{$dish['name']}}</td>
+            <td>{{$dish['name']}}</td>
             <td>{{number_format($dish['preis_intern'], 2,',')}}&euro;</td>
             <td>{{number_format($dish['preis_extern'], 2,',')}}&euro;</td>
-            <td><img src="/img/gerichte/{{$dish['bildname']}}.jpg" width="100px" height="100px"></td>
+            <td><img src="/img/gerichte/{{$dish['bildname']}}.jpg" width="100px" height="100px" alt="meal picture"></td>
             <td>{{$dish['allergen_codes']}}</td>
+            @if(isset($_SESSION['login_ok']))
+                <td><a href="/bewertung?gerichtid={{$dish['id']}}">Bewerten</a></td>
+            @endif
         </tr>
     @endforeach
 
@@ -76,6 +81,23 @@
         <li>Ausgewogene abwechslungsreiche Gerichte</li>
         <li>Sauberkeit</li>
     </ul>
+@endsection
+
+@section('opinion')
+        <table>
+            <tr>
+                <th>Gericht</th>
+                <th>Bemerkung</th>
+                <th>Bewertung</th>
+            </tr>
+            @foreach($recension as $point => $key)
+                <tr>
+                    <td>{{$key['gericht']}}</td>
+                    <td>{{$key['bemerkung']}}</td>
+                    <td>{{$key['sterne_bewertung']}}</td>
+                </tr>
+            @endforeach
+        </table>
 @endsection
 
 @section('footer')

@@ -29,6 +29,9 @@
  <td>Preis extern</td>
  <td>Bilder</td>
  <td>Allergen</td>
+ <?php if(isset($log)): ?>
+ <td>Dieses Gericht bewerten</td>
+ <?php endif; ?>
  </tr>
  <?php echo $this->yieldContent('gericht'); ?>
  </table>
@@ -44,6 +47,10 @@
  <h2 id="wichtig">Das ist uns wichtig!</h2>
  <div class="wichtig-list">
  <?php echo $this->yieldContent("wichtig"); ?>
+ </div>
+ <h2 id="wichtig">Meinungen unserer Gäste</h2>
+ <div class="opinion">
+ <?php echo $this->yieldContent('opinion'); ?>
  </div>
  <h2>Wir freuen uns auf Ihren Besuch!</h2>
 
