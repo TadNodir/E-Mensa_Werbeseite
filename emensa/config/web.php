@@ -24,5 +24,12 @@ return array(
     '/werbeseite' => 'WerbeseiteController@werbeseite',
     '/anmeldung' => 'WerbeseiteController@anmelden',
     '/anmeldung_verifizieren' => 'WerbeseiteController@verify',
-    '/abmeldung' => 'WerbeseiteController@werbeseite'
+    '/abmeldung' => 'WerbeseiteController@werbeseite',
+    '/bewertung' => 'WerbeseiteController@bewertung',
+    '/verify_evaluation' => 'WerbeseiteController@verify_evaluation',
+    '/bewertungen' => 'WerbeseiteController@bewertungen',
+    '/meinebewertungen' => 'WerbeseiteController@meine_bewertungen',
+    '/deleteBewertung' => 'WerbeseiteController@delete_bewertungen',
+    '/hervorheben' => 'WerbeseiteController@hervorheben',
+    '/hervorheben_cancel' => 'WerbeseiteController@hervorheben_cancel'
 );

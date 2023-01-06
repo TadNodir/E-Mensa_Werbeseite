@@ -29,6 +29,9 @@
                 <td>Preis extern</td>
                 <td>Bilder</td>
                 <td>Allergen</td>
+                @if(isset($log))
+                    <td>Dieses Gericht bewerten</td>
+                @endif
             </tr>
             @yield('gericht')
         </table>
@@ -44,6 +47,10 @@
         <h2 id="wichtig">Das ist uns wichtig!</h2>
         <div class="wichtig-list">
             @yield("wichtig")
+        </div>
+        <h2 id="wichtig">Meinungen unserer Gäste</h2>
+        <div class="opinion">
+            @yield('opinion')
         </div>
         <h2>Wir freuen uns auf Ihren Besuch!</h2>
 

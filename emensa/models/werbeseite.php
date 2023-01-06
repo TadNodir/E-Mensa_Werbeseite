@@ -1,5 +1,6 @@
 <?php
-function db_kategorie_select_all() {
+function db_kategorie_select_all()
+{
     $link = connectdb();
 
     $sql = "
@@ -22,11 +23,12 @@ function db_kategorie_select_all() {
     return $res_dishes;
 }
 
-function db_gericht_allergen_pair() {
+function db_gericht_allergen_pair()
+{
     $link = connectdb();
 
 
-    $sql = "SELECT name, bildname, GROUP_CONCAT(code) as allergen_codes, preis_intern, preis_extern
+    $sql = "SELECT id, name, bildname, GROUP_CONCAT(code) as allergen_codes, preis_intern, preis_extern
         FROM gericht_hat_allergen
         INNER JOIN gericht as gericht
         ON gericht_hat_allergen.gericht_id = gericht.id
@@ -43,7 +45,10 @@ function db_gericht_allergen_pair() {
     mysqli_close($link);
     return $res_gericht_allergen_pair;
 }
-function db_allergen() {
+
+
+function db_allergen()
+{
     $link = connectdb();
 
 
@@ -61,7 +66,8 @@ function db_allergen() {
 }
 
 
-function db_anzahl_gerichte() {
+function db_anzahl_gerichte()
+{
     $link = connectdb();
 
     $sql = "SELECT DISTINCT COUNT(*) as anzahl FROM gericht";
@@ -76,6 +82,7 @@ function db_anzahl_gerichte() {
     mysqli_close($link);
     return $res_anzahl_gerichte;
 }
+
 //function db_anzahl_newsletter() {
 //    $link = connectdb();
 //
@@ -91,7 +98,8 @@ function db_anzahl_gerichte() {
 //    mysqli_close($link);
 //    return $res_anzahl_newsletter ;
 //}
-function db_anzahl_besucher() {
+function db_anzahl_besucher()
+{
     $link = connectdb();
 
     $sql = "SELECT DISTINCT COUNT(*) as anzahl FROM pages";
@@ -108,7 +116,8 @@ function db_anzahl_besucher() {
 }
 
 
-function verifyUser () {
+function verifyUser()
+{
     if (isset($_POST['email']) && isset($_POST['password'])) {
         if (!empty($_POST['email']) && !empty($_POST['password'])) {
             $email = htmlspecialchars($_POST['email']);
@@ -127,13 +136,19 @@ function verifyUser () {
             }
             $userInfoRow = mysqli_fetch_row($userData);
 
+            $_SESSION['admin'] = $userInfoRow[4];
+
+            if (!is_null($userInfoRow)) {
+                $_SESSION['user_id'] = $userInfoRow[0];
+            }
+
             mysqli_close($link);
             return !is_null($userInfoRow);
         }
     }
 }
 
-function incrementLoginAmount (): void
+function incrementLoginAmount(): void
 {
     $link = connectdb();
 
@@ -149,7 +164,8 @@ function incrementLoginAmount (): void
     mysqli_close($link);
 }
 
-function lastLoginDate (bool $success) {
+function lastLoginDate(bool $success)
+{
     $link = connectdb();
     $name = loginName();
     if ($success) {
@@ -168,7 +184,8 @@ function lastLoginDate (bool $success) {
     mysqli_close($link);
 }
 
-function incrementAndLastLogin (bool $success) {
+function incrementAndLastLogin(bool $success)
+{
     $link = connectdb();
     try {
         $link->begin_transaction();
@@ -203,9 +220,10 @@ function incrementAndLastLogin (bool $success) {
     mysqli_close($link);
 }
 
-function loginName () {
+function loginName()
+{
 
-    if(verifyUser()) {
+    if (verifyUser()) {
 
         $link = connectdb();
 
@@ -213,7 +231,7 @@ function loginName () {
         $password = htmlspecialchars($_POST['password']);
         $hashKeyPassword = sha1('saltbae' . $password);
 
-        $sql = "SELECT name FROM benutzer WHERE email = '$email' AND passwort = '$hashKeyPassword'";
+        $sql = "SELECT name, id FROM benutzer WHERE email = '$email' AND passwort = '$hashKeyPassword'";
 
         $nameStatement = mysqli_query($link, $sql);
 
@@ -226,6 +244,183 @@ function loginName () {
 
         mysqli_close($link);
 
+        $_SESSION['username'] = $name[0];
         return $name;
     }
+}
+
+function bewertung_mealInfo()
+{
+
+    if (isset($_GET['gerichtid'])) {
+        $id = $_GET['gerichtid'];
+        $_SESSION['gerichtid'] = $id;
+        $link = connectdb();
+
+
+        $sql = "SELECT name, bildname FROM gericht WHERE id='$id'";
+
+        $evaluation = mysqli_query($link, $sql);
+
+        $evaluationInfo = mysqli_fetch_row($evaluation);
+
+        if (!$evaluationInfo) {
+            echo "Fehler während der Abfrage:  ", mysqli_error($link);
+            exit();
+        };
+
+        mysqli_close($link);
+        return $evaluationInfo;
+    }
+}
+
+function check_evaluation()
+{
+    if (isset($_POST['bemerkung']) && isset($_POST['stars'])) {
+        if (!empty($_POST['bemerkung']) && !empty($_POST['stars'])) {
+            $allowed_stars = ['sehr schlecht', 'schlecht', 'gut', 'sehr gut'];
+            $gericht_id = $_SESSION['gerichtid'];
+            $user_id = $_SESSION['user_id'];
+            $caption = htmlspecialchars($_POST['bemerkung']);
+            $star = $_POST['stars'];
+            if (($pos = array_search($star, $allowed_stars)) !== false) {
+                $star = $allowed_stars[$pos];
+            }
+
+            $link = connectdb();
+            $sql = "INSERT INTO bewertungen (bemerkung, sterne_bewertung, bewertungszeitpunkt, benutzer_id, gericht_id) VALUES ('$caption', '$star', NOW(), '$user_id', '$gericht_id')";
+
+            $mealData = mysqli_query($link, $sql);
+
+            if (!$mealData) {
+                echo "Fehler während der Abfrage:  ", mysqli_error($link);
+                return false;
+            }
+
+            mysqli_close($link);
+            return true;
+        }
+        return false;
+    }
+    return false;
+}
+
+function assesment_table()
+{
+    $link = connectdb();
+
+    $sql = "SELECT b.id AS benutzer_id, bemerkung, sterne_bewertung, bewertungszeitpunkt, hervorgehoben, 
+       b.name AS benutzer, g.name AS gericht, bewe.id AS bewertung_id FROM bewertungen bewe 
+           LEFT JOIN benutzer b ON bewe.benutzer_id = b.id 
+           LEFT JOIN gericht g ON g.id = bewe.gericht_id 
+                         ORDER BY bewertungszeitpunkt DESC LIMIT 30;";
+
+    $bewertungen = mysqli_query($link, $sql);
+
+    if (!$bewertungen) {
+        echo "Fehler während der Abfrage:  ", mysqli_error($link);
+        exit();
+    }
+
+    mysqli_close($link);
+    mysqli_fetch_row($bewertungen);
+    return $bewertungen;
+}
+
+function my_assesment_table()
+{
+
+    $link = connectdb();
+    $benutzerID = $_SESSION['user_id'];
+
+    $sql = "SELECT bewe.id AS bewertung_id, bemerkung, sterne_bewertung, bewertungszeitpunkt, hervorgehoben, 
+       b.name AS benutzer, g.name AS gericht FROM bewertungen bewe 
+           LEFT JOIN benutzer b ON bewe.benutzer_id = b.id 
+           LEFT JOIN gericht g ON g.id = bewe.gericht_id WHERE benutzer_id = '$benutzerID'
+                         ORDER BY bewertungszeitpunkt DESC LIMIT 30;";
+
+    $bewertungen = mysqli_query($link, $sql);
+
+    if (!$bewertungen) {
+        echo "Fehler während der Abfrage:  ", mysqli_error($link);
+        exit();
+    }
+
+    mysqli_close($link);
+    return $bewertungen;
+}
+
+function delete_evaluation()
+{
+    if (isset($_GET['bewertung_id'])) {
+
+        $link = connectdb();
+        $benutzerID = $_SESSION['user_id'];
+        $bew_id = $_GET['bewertung_id'];
+
+        $sql = "DELETE FROM bewertungen WHERE id = '$bew_id' AND benutzer_id = '$benutzerID'";
+
+        $bewertungen = mysqli_query($link, $sql);
+
+        if (!$bewertungen) {
+            echo "Fehler während der Abfrage:  ", mysqli_error($link);
+            exit();
+        }
+
+        mysqli_close($link);
+        return $bewertungen;
+    }
+}
+
+function hervorheben() {
+
+        $link = connectdb();
+        $bew_id = $_GET['bewertung_id'];
+
+        $sql = "UPDATE bewertungen SET hervorgehoben = true WHERE id='$bew_id'";
+
+        $show = mysqli_query($link, $sql);
+
+        if (!$show) {
+            echo "Fehler während der Abfrage:  ", mysqli_error($link);
+            exit();
+        }
+
+        mysqli_close($link);
+        return $show;
+}
+
+function hervorheben_abwaehlen() {
+
+    $link = connectdb();
+    $bew_id = $_GET['bewertung_id'];
+
+    $sql = "UPDATE bewertungen SET hervorgehoben = false WHERE id='$bew_id'";
+
+    $show = mysqli_query($link, $sql);
+
+    if (!$show) {
+        echo "Fehler während der Abfrage:  ", mysqli_error($link);
+        exit();
+    }
+
+    mysqli_close($link);
+    return $show;
+}
+
+function good_recension() {
+    $link = connectdb();
+
+    $sql = "SELECT g.name AS gericht, bemerkung, sterne_bewertung FROM bewertungen bewe 
+    LEFT JOIN gericht g ON g.id = bewe.gericht_id WHERE bewe.hervorgehoben = true";
+
+    $show = mysqli_query($link, $sql);
+
+    if (!$show) {
+        echo "Fehler während der Abfrage:  ", mysqli_error($link);
+        exit();
+    }
+
+    mysqli_close($link);
+    return $show;
 }
